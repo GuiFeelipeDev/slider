@@ -1,39 +1,9 @@
-import React, { useEffect } from "react"
+import React from "react"
 import { MdArrowBackIos, MdArrowForwardIos } from "react-icons/md"
-import db from "./data"
 
-const Index = () => {
-  const defaultColor = "#DB4545"
-  const defaultSlide = {
-    display: "none",
-  }
-  const activeSlide = {
-    width: "880px",
-    height: "520px",
-    objectFit: "cover",
-    zIndex: "999",
-    transition: "0.5s",
-  }
-
-  const nextSlide = {
-    width: "900px",
-    objectFit: "cover",
-    position: "absolute",
-    marginRight: "-100px",
-    height: "500px",
-    opacity: "70%",
-    transition: "0.5s",
-  }
-  const prevSlide = {
-    width: "900px",
-    objectFit: "cover",
-    position: "absolute",
-    marginLeft: "-100px",
-    height: "500px",
-    opacity: "70%",
-    transition: "0.5s",
-  }
-  const [data, setData] = React.useState(db)
+const Index = ({ db, argColor, slTitle }) => {
+  const defaultColor = `${argColor}`
+  const data = db
   const [pos, setPos] = React.useState(0)
 
   const nxtSlide = () => {
@@ -54,7 +24,7 @@ const Index = () => {
 
   return (
     <>
-      <section className="base" style={{ justifyContent: "center" }}>
+      <section className="style-base">
         <MdArrowBackIos
           style={{
             fill: `${defaultColor}`,
@@ -64,49 +34,33 @@ const Index = () => {
           }}
           onClick={() => prvSlide()}
         />
-        <article
-          className="center"
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            flexDirection: "column",
-            minHeight: "624px",
-          }}
-        >
+        <article className="center">
           <h1 style={{ color: `${defaultColor}`, fontSize: "46px" }}>
-            Akatsuki
+            {slTitle}
           </h1>
-          <div
-            className="center-image"
-            style={{
-              width: "1000px",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              flexDirection: "column",
-            }}
-          >
+          <div className="center-image">
             {data.map((item, index) => {
               const { url, title } = item
-              let position = defaultSlide
+              let position = "default-slide"
 
               if (pos === index) {
-                position = activeSlide
+                position = "active-slide"
               }
               if (
                 index === pos - 1 ||
                 (pos === 0 && index === data.length - 1)
               ) {
-                position = prevSlide
+                position = "prev-slide"
               }
               if (
                 index === pos + 1 ||
                 (pos === data.length - 1 && index === 0)
               ) {
-                position = nextSlide
+                position = "next-slide"
               }
-              return <img src={url} alt={title} style={position} key={index} />
+              return (
+                <img src={url} alt={title} className={position} key={index} />
+              )
             })}
           </div>
           <h1 style={{ color: "#000", fontSize: "46px" }}>
